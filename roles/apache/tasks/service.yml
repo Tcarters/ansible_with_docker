@@ -1,0 +1,10 @@
+---
+- name: Start Apache web server
+  service:
+    name: apache2
+    state: started
+    enabled: true
+  register: status_ps
+
+- debug:
+    msg: "The Apache service start task execution status is: {{ status_ps }}"

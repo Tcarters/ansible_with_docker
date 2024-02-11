@@ -1,0 +1,17 @@
+---
+- name: Install SSH in Docker containers
+  hosts: containers
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Install SSH server
+      apt:
+        name: openssh-server
+        state: present
+
+    - name: Start SSH service
+      service:
+        name: ssh
+        state: started
+        enabled: yes

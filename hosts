@@ -1,7 +1,15 @@
 [localhost]
 127.0.0.1
 
+[containers]
+rhel_container ansible_host=172.17.0.3
+ubuntu_container ansible_host=172.17.0.2 
+
+#rhel_containers
+#ubuntu_containers
+
 [rhel_containers]
+172.17.0.3
 172.17.0.3
 
 [ubuntu_containers]

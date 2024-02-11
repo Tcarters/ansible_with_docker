@@ -1,0 +1,9 @@
+---
+  - hosts: ubuntu_containers
+    become: true
+    vars:
+       ansible_ssh_user: root
+       ansible_ssh_password: root
+       ansible_ssh_private_key_file: ~/.ssh/id_rsa_docker
+    roles:
+      - apache
