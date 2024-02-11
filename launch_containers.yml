@@ -1,0 +1,119 @@
+---
+- name: Launch Docker containers
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  pre_tasks:
+    - name: Check if Docker is installed
+      command: docker --version
+      register: docker_installed
+      ignore_errors: yes
+
+    - name: Display message if Docker is not installed
+      debug:
+        msg: "Docker is not installed on this machine. Please install Docker before running this playbook."
+      when: docker_installed is failed
+
+    - name: Install Docker if not present (Ubuntu)
+      apt:
+        name: docker.io
+        state: latest
+        update_cache: yes
+      when: docker_installed is failed
+      become: yes
+
+  tasks:
+    - name: Pull the latest Ubuntu image
+      community.docker.docker_image:
+        name: "ubuntu"
+        source: pull
+
+    - name: Run an Ubuntu container
+      community.docker.docker_container:
+        name: "my_ubuntu_container"
+        image: "ubuntu"
+        state: started
+        command: sleep infinity
+
+    - name: Pull the latest RHEL image
+      community.docker.docker_image:
+        name: "registry.access.redhat.com/ubi8/ubi"
+        source: pull
+
+    - name: Run a RHEL container
+      community.docker.docker_container:
+        name: "my_rhel_container"
+        image: "registry.access.redhat.com/ubi8/ubi"
+        state: started
+        command: sleep infinity
+
+    - name: List Docker containers
+      command: docker ps
+      become: yes
+      register: output_docker_ps
+
+    - debug:
+        msg: "{{ output_docker_ps.stdout }}"
+
+
+
+
+
+
+# ---
+# - name: Launch Docker containers
+#   hosts: localhost
+#   connection: local
+#   gather_facts: no
+#   pre_tasks:
+#     - name: Check if Docker is installed
+#       command: docker --version
+#       register: docker_installed
+#       ignore_errors: yes
+
+#     - name: Fail if Docker is not installed
+#       debug:
+#         msg: "Docker is not installed on this machine. Please install Docker before running this playbook."
+#       when: docker_installed is failed
+
+#     - name: Install Docker if not present (Ubuntu)
+#       apt:
+#         name: docker.io
+#         state: latest
+#         update_cache: yes
+#       when: docker_installed is failed
+#       become: yes
+
+#   tasks:
+#     - name: Pull the latest Ubuntu image
+#       community.docker.docker_image:
+#         name: "ubuntu"
+#         source: pull
+
+#     - name: Run an Ubuntu container
+#       community.docker.docker_container:
+#         name: "my_ubuntu_container"
+#         image: "ubuntu"
+#         state: started
+#         command: sleep infinity
+
+#     - name: Pull the latest RHEL image
+#       community.docker.docker_image:
+#         name: "registry.access.redhat.com/ubi8/ubi"
+#         source: pull
+
+#     - name: Run a RHEL container
+#       community.docker.docker_container:
+#         name: "my_rhel_container"
+#         image: "registry.access.redhat.com/ubi8/ubi"
+#         state: started
+#         command: sleep infinity
+    
+#     - name: List Docker containers
+#       command: docker ps
+#       become: yes
+#       register: output_docker_ps
+    
+#     - debug:
+#       msg: output_docker_ps.stdout
+
