@@ -1,0 +1,8 @@
+[localhost]
+127.0.0.1
+
+[rhel_containers]
+172.17.0.3
+
+[ubuntu_containers]
+172.17.0.2
